@@ -1,29 +1,230 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Snake game</title>
+  <title>Snake game imrpoved</title>
+   <!-- <link rel="shortcut icon" href="fav.ico" type="image/x-icon"> -->
   <meta charset="utf-8">
+  <!-- set actually width for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- forbid of screen expansion on mobile devices -->
+  <meta name="viewport" content="user-scalable=no">
+  <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+  <!-- <script type="text/javascript" src="jquery-3.3.1.min.js"></script> -->
+  <script type="text/javascript"
+    src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <style type="text/css">
+
+    /*disable text selection*/
+    * { 
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer */
+      -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+      -webkit-user-select: none; /* Chrome, Safari, and Opera */
+      -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+    }
+
     html,body{
       margin: 0;
       height: 100%;
     }
+
+    /* js: minimal min-width 500/min-height 500.
+      If client size bigger - size of body almost all of client */
     body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Verdana;
+      font-size: 1em;
+      /*default, if js don't work*/
+      min-width: 500px; 
+      min-height: 500px;
+      /* min-width, min-height - set when the window is opened/reloaded */
+    }
+
+    /* js: minmal width 500/height 500. If body bigger - size almost all of body*/
+    #main-container {
+      display: flex;
+      flex-flow: column;
+      /*default, if js don't work*/
+      width: 500px;
+      height: 500px;
+      /* width, height - set when the window is opened/reloaded */
+    }
+    h1 {
+      margin: 0;
+      text-align: center;
+    }
+    p {
+      margin: 0;
+      text-align: center;
+    }
+
+    .header{
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 30px;
+      padding: 5px;
+      flex: 0 1 auto;
+      border: 1px solid grey;
+      position: relative; /*for img absolute position relatively .header*/
     }
-    #canvas {
-      /*border: 1px solid black;*/
+
+    .header img{
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 5px;
+      cursor: pointer;
     }
+    
+    /*flex - occupies x2 free space except .header and .footer */
+    #game-container{
+      flex: 3 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* flex: height - depends on content of #info-container */
+    #info-bar{
+      flex: 0 1 auto;
+      display: flex;
+      /*flex-flow: row;*/
+      justify-content: space-around;
+      align-items: center;
+      border: 1px solid grey;
+    }
+    #info-bar p {
+      display: inline-block;
+    }
+    
+    canvas{ 
+      flex: 1 1 auto;
+      border: 2px solid blue;
+    }
+    
+    /*flex - occupies x1 free space except .header and .footer */
+    #mobile-control-container{
+      display: flex;
+      flex: 1 1 auto;
+      border: 1px solid grey;
+      /* width, height - set in js when the window is opened/reloaded */
+    }
+    
+    #controls-speed-container{
+      display: flex;
+      flex-flow: column;
+      flex: 1 1 auto;
+      justify-content: center;
+      border-right: 1px solid black;
+    }
+
+    #controls-speed{
+      display: flex;
+      justify-content: space-around;
+    }
+
+    #controls-direction-container{
+      display: flex;
+      flex-flow: column;
+      flex: 2 1 auto;
+      justify-content: center;
+    }
+    #controls-direction{
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .span-big{
+      font-size: 1.5em;
+    }
+    .footer { /* flex: height - depends on content of .footer */
+      flex: 0 1 auto;
+      padding: 5px 0;
+      border: 1px solid grey;
+      box-sizing: border-box;
+    }
+    .footer a {
+      color: black;
+      text-decoration: none;
+      border-bottom: 1px solid black;
+    }
+    
+    .footer a:hover {
+      border: 1px solid black;
+      padding: 1px;
+    }
+    
+    .footer a:active {
+      background: orange;
+      border-radius: 10px;
+      padding: 2px;
+      border: 1px solid black;
+    }
+
+    .mobile-control-button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: lightblue;
+      border-radius: 50%;
+      box-shadow:
+        inset rgba(0,0,0,.5) -3px -3px 8px,
+        inset rgba(255,255,255,.9) 3px 3px 8px,
+        rgba(0,0,0,.8) 3px 3px 8px -3px;
+      /*default, if js don't work*/
+      width: 50px;
+      height: 50px;
+      /*width,height,margin - js */
+    }
+
   </style>
 </head>
 <body>
+  <div id="main-container">
 
-  <canvas id="canvas" width="400" height="400"></canvas>
+    <div class="header">
+      <img src="media/question_mark.png" alt="controls info" height="30px">
+      <p>While without management from mobile</p>
+    </div>
 
-  <script type="text/javascript"
-    src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <div id="game-container">
+      <div id="info-bar">
+          <p>Score: <span id="s_score"></span></p>
+          <p>Record: <span id="s_record"></span></p>
+      </div>
+      
+      <canvas id="canvas"></canvas> <!-- width and height are set in js --> 
+    </div>
+
+    <div id="mobile-control-container"> <!-- displays only for touchscreen devices --> 
+
+      <div id="controls-speed-container">
+        <p>Speed</p>
+        <div id="controls-speed"> 
+          <div class="mobile-control-button" id="button-speed_up"><span class="span-big">+</span></div>
+          <div class="mobile-control-button" id="button-speed_down"><span class="span-big">-</span></div>
+        </div>
+      </div>
+      
+      <div id="controls-direction-container">
+        <p>Direction</p>
+        <div id="controls-direction">
+          <div class="mobile-control-button" id="button-up"> <span class="span-big">▲</span> </div>
+          <div class="mobile-control-button" id="button-down"> <span class="span-big">▼</span></div>
+          <div class="mobile-control-button" id="button-left"> <span class="span-big">◄</span></div>
+          <div class="mobile-control-button" id="button-right"> <span class="span-big">►</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>by <a href="http://www.budladislav.info/">Budladislav</a> jan.2019</p>
+    </div>
+
+  </div>
 
   <script type="text/javascript">
     'use strict';
@@ -33,12 +234,12 @@
     let e_Canvas = document.getElementById('canvas');
     let canvasContext = e_Canvas.getContext('2d');
 
-    let n_CanvasWidth = e_Canvas.width; //need to be round to 10
-    let n_CanvasHeight = e_Canvas.height; //need to be round to 10
-
-    let n_BlockSize = 10;
-    let n_WidthInBlocks = n_CanvasWidth / n_BlockSize;
-    let n_HeightInBlocks = n_CanvasHeight / n_BlockSize;
+    let n_CanvasWidth; //Setup in fSetInterface(). need to be round to 10
+    let n_CanvasHeight; //Setup in fSetInterface(). need to be round to 10
+    let n_CanvasShortSide; //Setup in fSetInterface().
+    let n_BlockSize;//Setup in fSetInterface()
+    let n_WidthInBlocks;//Setup in fSetInterface()
+    let n_HeightInBlocks;//Setup in fSetInterface()
 
     let n_Score = 0;
     let n_IntervalId;
@@ -54,6 +255,76 @@
 
     /* FUNCTIONS */
 
+    /*setup intrface. Used for dynamic setting sizes of elements.
+    min-width 500px, min-height 500px. if client size fewer - scrollbars
+    if bigger - content size expands to client size*/
+    let fSetInterface = () => {
+      let nWindowWidth = document.documentElement.clientWidth;
+      let nWindowHeight = document.documentElement.clientHeight;
+      let nWindowShortSide = Math.min(nWindowWidth,nWindowHeight);
+      let nBodyMinWidth;
+      let nBodyMinHeight;
+  
+      if (nWindowWidth < 500){
+        nBodyMinWidth = 500;
+      } else {
+        nBodyMinWidth = nWindowWidth - 20;
+      }
+      if (nWindowHeight < 500){
+        nBodyMinHeight = 500;
+      } else {
+        nBodyMinHeight = nWindowHeight - 20;
+      }
+  
+      $('body').css({
+        'min-width' : nBodyMinWidth + 'px',
+        'min-height' : nBodyMinHeight + 'px'
+      });
+      $('#main-container').css({
+        'width' : nBodyMinWidth + 'px',
+        'height' : nBodyMinHeight + 'px'
+      });
+  
+      if (!fIsMobile()) { //desctop
+        $('#mobile-control-container').css('display','none'); 
+      } else { //mobile
+        //Increases text size on mobile devices
+        (nWindowWidth < nWindowHeight)
+          ? $('body').css('font-size','2em')
+          : $('body').css('font-size','1.5em')    
+        
+        let nControlContainerHeight = (nWindowWidth < nWindowHeight)
+          ? nWindowShortSide * 0.12 : nWindowShortSide * 0.25;
+        $('#mobile-control-container').css({
+          'width' : nBodyMinWidth + 'px',
+          'height' : nControlContainerHeight + 'px'
+        });
+  
+        let nButtonSize = nControlContainerHeight - 20;
+        $('.mobile-control-button').css({
+          'width': nButtonSize +'px',
+          'height': nButtonSize +'px',
+          'margin': '10px'
+        });
+      }
+  
+      n_CanvasWidth = $('#canvas').width();
+      n_CanvasHeight = $('#canvas').height();
+      n_CanvasShortSide = Math.min(n_CanvasWidth,n_CanvasHeight);
+      //html attr-s must be same that css, so that the drawing is not distorted
+      e_Canvas.width = n_CanvasWidth;
+      e_Canvas.height = n_CanvasHeight;
+
+      n_BlockSize = Math.floor(n_CanvasShortSide / 20);
+      n_WidthInBlocks = Math.floor(n_CanvasWidth / n_BlockSize);
+      n_HeightInBlocks = Math.floor(n_CanvasHeight / n_BlockSize); 
+    }
+  
+    //check is it device mobile (with touchscreen). True - mobile/ false - desctop
+    let fIsMobile = () => {
+      return ('ontouchstart' in document.documentElement);
+    }
+
     //draw border on canvas, 1 block thick
     let fDrawBorder = () => {
       canvasContext.fillStyle = "Gray";
@@ -61,6 +332,23 @@
       canvasContext.fillRect(n_CanvasWidth - n_BlockSize,0,n_CanvasWidth,n_CanvasHeight); //right
       canvasContext.fillRect(0, n_CanvasHeight - n_BlockSize,n_CanvasWidth,n_BlockSize); //bottom
       canvasContext.fillRect(0,0,n_BlockSize,n_CanvasHeight); //left
+    }
+
+    let fDrawGrid = () => {
+      canvasContext.strokeStyle = "silver";
+      canvasContext.lineWidth = 1;
+      canvasContext.beginPath();
+      //horizontal  lines
+      for (var i = n_HeightInBlocks - 1; i >= 0; i--) {
+        canvasContext.moveTo(0, i * n_BlockSize);
+        canvasContext.lineTo(n_CanvasWidth,i * n_BlockSize); 
+      }
+      //vertical lines
+      for (var i = n_WidthInBlocks - 1; i >= 0; i--) {
+        canvasContext.moveTo(i * n_BlockSize, 0);
+        canvasContext.lineTo(i * n_BlockSize, n_CanvasHeight); 
+      }
+      canvasContext.stroke();
     }
 
     //draw score on left top side of canvas
@@ -172,19 +460,18 @@
     }
 
     //check collision of snake head with own body or wall
-    Snake.prototype.fCheckCollision = function(o_Head){
-      let b_TopCollision = (o_Head.row === 0);
-      let b_RightCollision = (o_Head.col === n_WidthInBlocks - 1);
-      let b_BottomCollision = (o_Head.row === n_HeightInBlocks - 1);
-      let b_LeftCollision = (o_Head.col === 0);
-
+    Snake.prototype.fCheckCollision = function(headBlock){
+      //check wall collision
+      let b_TopCollision = (headBlock.row === 0);
+      let b_RightCollision = (headBlock.col === n_WidthInBlocks - 1);
+      let b_BottomCollision = (headBlock.row === n_HeightInBlocks - 1);
+      let b_LeftCollision = (headBlock.col === 0);
       let b_WallCollision = b_TopCollision || b_RightCollision ||
         b_BottomCollision || b_LeftCollision;
-
+      //check self collision
       let b_SelfColission = false;
-
       for (let i = 0; i < this.segments.length; i++){
-        if (o_Head.equal(this.segments[i]) ){
+        if (headBlock.equal(this.segments[i]) ){
           b_SelfColission = true;
           break;
         }
@@ -234,11 +521,14 @@
 
     /* MAIN CODE */
 
+    fSetInterface();
+
     let o_Snake = new Snake();
     let o_Apple = new Apple();
 
     n_IntervalId = setInterval(() => {
       canvasContext.clearRect(0,0,n_CanvasWidth,n_CanvasHeight);
+      fDrawGrid();
       fDrawBorder();
       o_Apple.draw();
       fDrawScore();
