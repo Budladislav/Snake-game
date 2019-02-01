@@ -53,11 +53,11 @@
     }
     h1 {
       margin: 0;
-      text-align: center;
+      /*text-align: center;*/
     }
     p {
       margin: 0;
-      text-align: center;
+      /*text-align: center;*/
     }
 
     .header{
@@ -94,14 +94,22 @@
       justify-content: space-around;
       align-items: center;
       border: 1px solid grey;
+      padding: 5px 0;
     }
     #info-bar p {
       display: inline-block;
     }
-    
-    canvas{ 
+
+    #canvas-container{
       flex: 1 1 auto;
-      border: 2px solid blue;
+      display: flex;
+      justify-content: center;
+      align-items: center; 
+      border: 1px solid grey;
+    }
+    
+    canvas{
+      border: 5px solid blue;
     }
     
     /*flex - occupies x1 free space except .header and .footer */
@@ -140,6 +148,9 @@
       font-size: 1.5em;
     }
     .footer { /* flex: height - depends on content of .footer */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 1 auto;
       padding: 5px 0;
       border: 1px solid grey;
@@ -179,24 +190,131 @@
       /*width,height,margin - js */
     }
 
+    .info-window{
+      position: absolute;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: space-around;
+      border: 1px solid black;
+      border-radius: 20px;
+      background-color: rgba(255,255,255,0.9);
+      width: 300px;
+      height: 125px;
+      padding: 20px 10px 10px 10px;
+    }
+
+    #controls-window{
+      height: 300px;
+      display: none;
+    }
+    #gameover-window{
+      display: none;
+    }
+    #pause-window{
+      display: none;
+    }
+    .window-button{
+      box-shadow:
+        inset rgba(0,0,0,.5) -3px -3px 8px,
+        inset rgba(255,255,255,.9) 3px 3px 8px,
+        rgba(0,0,0,.8) 3px 3px 8px -3px;
+      color: white;
+    }
+    .close-btn{
+      
+      border: 1px solid grey;
+      padding: 5px;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: gray;
+      
+    }
+    .ok_btn{
+      width: 30%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid grey;
+      cursor: pointer;
+      background-color: gray;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .div-text p {
+      margin-bottom: 5px;
+    }
+
   </style>
 </head>
 <body>
+<!-- info windows -->
+    <div id="gameover-window" class="info-window">
+      <div class="close-btn window-button"><p>×</p></div>
+      <h1>Game over</h1>
+      <p id="over-score"></p>
+      <p id="to-record"></p>
+      <div class="ok_btn window-button"><p>OK</p></div>
+    </div>
+
+    <div id="controls-window" class="info-window">
+      <div class="close-btn window-button"><p>×</p></div>
+      <h1><b id="constols_state">Paused</b></h1>
+      <h1><b>Control buttons:</b></h1>
+        <div class="div-text">
+          <p>
+            <b><span id="↑">↑</span>,<span id="←">←</span>,<span id="↓">↓</span>,<span id="→">→</span></b> or 
+            <b><span id="w">W</span>,<span id="a">A</span>,<span id="s">S</span>,<span id="d">D</span></b>
+             - <i>direction</i>
+          </p>
+          <p> <b><span id="p">P</span></b> - <i>Pause/unpause</i></p>
+          <p> <b><span id="p">I</span></b> - <i>PC controls info show/hide</i></p>
+          <p> <b><span id="p">N</span></b> - <i>Speed decrease</i></p>
+          <p> <b><span id="p">M</span></b> - <i>Speed increase</i></p>
+          <p> <b><span id="p">Esc/Enter</span></b> - <i>Close window</i></p>
+        </div>
+      <div class="ok_btn window-button"><p>ok</p></div>
+    </div>
+
+    <div id="pause-window" class="info-window">
+      <div class="close-btn window-button "><p>×</p></div>
+      <h1>Game paused</h1>
+      <div class="ok_btn window-button"><p>Resume</p></div>
+    </div>
+
+    
+
+
+<!-- info windows end -->
+
+<!-- #main-container -->
   <div id="main-container">
 
     <div class="header">
-      <img src="media/question_mark.png" alt="controls info" height="30px">
+      <img id="help" src="media/question_mark.png" alt="controls info" height="30px">
       <p>While without management from mobile</p>
     </div>
 
     <div id="game-container">
       <div id="info-bar">
-          <p>Score: <span id="s_score"></span></p>
-          <p>Record: <span id="s_record"></span></p>
+          <p>Score: <b><span id="s_score">0</span></b></p>
+          <p>Record: <b><span id="s_record"></span></b></p>
+          <p>Speed: <b><span id="s_speed"></span></b></p>
       </div>
-      
-      <canvas id="canvas"></canvas> <!-- width and height are set in js --> 
+
+      <div id="canvas-container">
+        <canvas id="canvas"></canvas> <!-- width and height are set in js -->
+      </div>
     </div>
+
 
     <div id="mobile-control-container"> <!-- displays only for touchscreen devices --> 
 
@@ -220,11 +338,13 @@
 
     </div>
 
+
     <div class="footer">
       <p>by <a href="http://www.budladislav.info/">Budladislav</a> jan.2019</p>
     </div>
 
   </div>
+<!-- #main-container end -->
 
   <script type="text/javascript">
     'use strict';
@@ -234,21 +354,31 @@
     let e_Canvas = document.getElementById('canvas');
     let canvasContext = e_Canvas.getContext('2d');
 
-    let n_CanvasWidth; //Setup in fSetInterface(). need to be round to 10
-    let n_CanvasHeight; //Setup in fSetInterface(). need to be round to 10
-    let n_CanvasShortSide; //Setup in fSetInterface().
-    let n_BlockSize;//Setup in fSetInterface()
-    let n_WidthInBlocks;//Setup in fSetInterface()
-    let n_HeightInBlocks;//Setup in fSetInterface()
+    //values assigned in fInterfaceAndGlobalVariablesSetup()
+    let n_BlockSize;
+    let n_CanvasWidth; 
+    let n_CanvasHeight;
+    let n_WidthInBlocks; // 0,0 - top-left cell
+    let n_HeightInBlocks; //n_WidthInBlocks-1, n_HeightInBlocks-1 - bottom-right cell
+    //values assigned in fInterfaceAndGlobalVariablesSetup()
+
+    let n_updateFrequancyMs = 85;
+    let n_SpeedMode = 20 - n_updateFrequancyMs / 5;
+    let s_GameState = 'active'; // active, paused or over
 
     let n_Score = 0;
-    let n_IntervalId;
+    let n_TimeoutId; //for game loop
+    let n_IntervalId; //for repeating action while keypress 
 
     let o_Directions = {
-      37: 'left',
-      38: 'up',
-      39: 'right',
-      40: 'down'
+      37: 'left', //←
+      65: 'left', //A
+      38: 'up', //↑
+      87: 'up', //W
+      39: 'right', // →
+      68: 'right', //D
+      40: 'down', //↓
+      83: 'down' //S
     }
 
     /* GLOBAL VARIABLES end */
@@ -258,12 +388,13 @@
     /*setup intrface. Used for dynamic setting sizes of elements.
     min-width 500px, min-height 500px. if client size fewer - scrollbars
     if bigger - content size expands to client size*/
-    let fSetInterface = () => {
+    let  fInterfaceAndGlobalVariablesSetup = () => {
       let nWindowWidth = document.documentElement.clientWidth;
       let nWindowHeight = document.documentElement.clientHeight;
       let nWindowShortSide = Math.min(nWindowWidth,nWindowHeight);
       let nBodyMinWidth;
       let nBodyMinHeight;
+      let nBodyMinSide;
   
       if (nWindowWidth < 500){
         nBodyMinWidth = 500;
@@ -275,6 +406,8 @@
       } else {
         nBodyMinHeight = nWindowHeight - 20;
       }
+
+      nBodyMinSide = Math.min(nBodyMinWidth,nBodyMinHeight);
   
       $('body').css({
         'min-width' : nBodyMinWidth + 'px',
@@ -288,6 +421,7 @@
       if (!fIsMobile()) { //desctop
         $('#mobile-control-container').css('display','none'); 
       } else { //mobile
+        $('#help').css('display','none');
         //Increases text size on mobile devices
         (nWindowWidth < nWindowHeight)
           ? $('body').css('font-size','2em')
@@ -299,6 +433,9 @@
           'width' : nBodyMinWidth + 'px',
           'height' : nControlContainerHeight + 'px'
         });
+
+
+        //$('#mobile-control-container').сss('flex','0.5 1 auto')
   
         let nButtonSize = nControlContainerHeight - 20;
         $('.mobile-control-button').css({
@@ -307,15 +444,22 @@
           'margin': '10px'
         });
       }
+
+      if (localStorage['lsSnakeRecord'] === undefined){
+        localStorage['lsSnakeRecord'] = '0';
+      }
+      $('#s_record').text(localStorage['lsSnakeRecord']);
+      $('#s_speed').text(n_SpeedMode);
+
+      n_BlockSize = Math.floor( (nBodyMinSide / 20) / 10) * 10;
   
-      n_CanvasWidth = $('#canvas').width();
-      n_CanvasHeight = $('#canvas').height();
-      n_CanvasShortSide = Math.min(n_CanvasWidth,n_CanvasHeight);
-      //html attr-s must be same that css, so that the drawing is not distorted
+      n_CanvasWidth = Math.floor( $('#canvas-container').width() / n_BlockSize) * n_BlockSize;
+      n_CanvasHeight = Math.floor( $('#canvas-container').height() / n_BlockSize) * n_BlockSize;
+
+      //css canvas width and heights will be equal to html attr-s
       e_Canvas.width = n_CanvasWidth;
       e_Canvas.height = n_CanvasHeight;
 
-      n_BlockSize = Math.floor(n_CanvasShortSide / 20);
       n_WidthInBlocks = Math.floor(n_CanvasWidth / n_BlockSize);
       n_HeightInBlocks = Math.floor(n_CanvasHeight / n_BlockSize); 
     }
@@ -323,15 +467,6 @@
     //check is it device mobile (with touchscreen). True - mobile/ false - desctop
     let fIsMobile = () => {
       return ('ontouchstart' in document.documentElement);
-    }
-
-    //draw border on canvas, 1 block thick
-    let fDrawBorder = () => {
-      canvasContext.fillStyle = "Gray";
-      canvasContext.fillRect(0,0,n_CanvasWidth,n_BlockSize); //top
-      canvasContext.fillRect(n_CanvasWidth - n_BlockSize,0,n_CanvasWidth,n_CanvasHeight); //right
-      canvasContext.fillRect(0, n_CanvasHeight - n_BlockSize,n_CanvasWidth,n_BlockSize); //bottom
-      canvasContext.fillRect(0,0,n_BlockSize,n_CanvasHeight); //left
     }
 
     let fDrawGrid = () => {
@@ -351,23 +486,71 @@
       canvasContext.stroke();
     }
 
-    //draw score on left top side of canvas
-    let fDrawScore = () => {
-      canvasContext.font = "20px Veradna";
-      canvasContext.fillStyle = 'Black';
-      canvasContext.textBaseline = 'top';
-      canvasContext.fillText(`Score: ${n_Score}`,n_BlockSize,n_BlockSize);
-    }
-
     //Game stops (clear interval of setInterval() ), and draw mesage "End game"
     let fGameOver = () => {
-      clearInterval(n_IntervalId);
-      canvasContext.font = "60px Veradna";
-      canvasContext.fillStyle = 'Grey';
-      canvasContext.textAlign = 'center';
-      canvasContext.textBaseline = 'middle';
-      canvasContext.fillText('Game over', n_CanvasWidth / 2, n_CanvasHeight / 2);
+      $('#over-score').text('Score: ' + n_Score);
+      //record check
+      if (+localStorage['lsSnakeRecord'] > n_Score){
+        $('#to-record').text(+localStorage['lsSnakeRecord'] - n_Score + ' points till record');
+      } else if (+localStorage['lsSnakeRecord'] === n_Score) {
+        $('#to-record').text('Wow, almost record!');
+      } else if (+localStorage['lsSnakeRecord'] < n_Score) {
+        localStorage['lsSnakeRecord'] = n_Score;
+        $('#to-record').text('New record! ' + n_Score + ', Well done!');
+        $('#over-score').css('display','none');
+      } 
+
+      hGameoverWindowOpen();
     }
+
+    let fGameLoop = () => {
+      canvasContext.clearRect(0,0,n_CanvasWidth,n_CanvasHeight);
+      // fDrawGrid(); //for debug
+      // drawCheck(n_WidthInBlocks-1,n_HeightInBlocks-1); //for debug
+
+      o_Apple.draw();
+      o_Snake.move();
+      o_Snake.draw();
+      if (s_GameState === 'over'){
+        return;
+      }
+      n_TimeoutId = setTimeout(fGameLoop, n_updateFrequancyMs);
+    }
+
+    let fGamePause = () => {
+      clearTimeout(n_TimeoutId);
+      s_GameState = 'paused';
+    }
+
+    let fGameStop = () => {
+      clearTimeout(n_TimeoutId);
+      s_GameState = 'over';
+    }
+
+    let fGameContinue = () => {
+      fGameLoop();
+      s_GameState = 'active';
+    }
+
+    //hide info-window and resume game, or reload game if it's over
+    let fCloseAllWindows = () => {
+      if (s_GameState === 'paused'){
+        $('#controls-window').css('display','none');
+        $('#pause-window').css('display','none');
+        $('#gameover-window').css('display','none');
+        s_GameState = 'active';
+        fGameContinue();
+      } else if (s_GameState === 'over'){
+        location.reload(false);
+      }   
+    }
+
+    let fDrawCircle = (Xcenter, Ycenter, radius, fill = true) => {
+      canvasContext.beginPath();
+      canvasContext.arc(Xcenter, Ycenter, radius, 0, Math.PI * 2);
+      (fill) ? canvasContext.fill() : canvasContext.stroke();
+    }
+    
 
     /* FUNCTIONS end */
 
@@ -381,9 +564,9 @@
 
     let Snake = function() {
       this.segments = [
-        new Block(7,5),
-        new Block(6,5),
-        new Block(5,5)
+        new Block(Math.floor(n_WidthInBlocks / 2) + 1, Math.floor(n_HeightInBlocks / 2)),
+        new Block(Math.floor(n_WidthInBlocks / 2), Math.floor(n_HeightInBlocks / 2)),
+        new Block(Math.floor(n_WidthInBlocks / 2) - 1, Math.floor(n_HeightInBlocks / 2))
       ];
 
       this.direction = 'right';
@@ -397,6 +580,7 @@
     /* CONSTRUCTORS end */
 
     /* PROTOTYPE METHODS */
+
     Block.prototype.drawSnakePart = function(color = 'black') {
       let x = this.col * n_BlockSize;
       let y = this.row * n_BlockSize;
@@ -404,15 +588,17 @@
       canvasContext.fillRect(x, y, n_BlockSize, n_BlockSize);
     }
 
-    Block.prototype.drawApple = function(color = 'green') {
+    Block.prototype.drawApple = function() {
       let radius = n_BlockSize / 2;
       let Xcenter = (this.col * n_BlockSize) + radius;
       let Ycenter = (this.row * n_BlockSize) + radius;
 
-      canvasContext.fillStyle = color;
-      canvasContext.beginPath();
-      canvasContext.arc(Xcenter, Ycenter, radius, 0, Math.PI * 2);
-      canvasContext.fill();
+      canvasContext.fillStyle = 'tomato';
+      canvasContext.strokeStyle = 'black';
+      canvasContext.lineWidth = 2;
+      
+      fDrawCircle(Xcenter, Ycenter, radius);
+      fDrawCircle(Xcenter, Ycenter, radius-1, false);
     }
 
     //check equality positions of 2 blocks
@@ -452,7 +638,12 @@
       this.segments.unshift(o_NewHead);
 
       if (o_NewHead.equal(o_Apple.position) ){
-        n_Score++;
+        $('#s_score').text(++n_Score);
+
+        if (+localStorage['lsSnakeRecord'] < n_Score){
+          $('#s_record').text(n_Score + ' new!');
+        }
+
         o_Apple.move();
       } else {
         this.segments.pop();
@@ -462,10 +653,10 @@
     //check collision of snake head with own body or wall
     Snake.prototype.fCheckCollision = function(headBlock){
       //check wall collision
-      let b_TopCollision = (headBlock.row === 0);
-      let b_RightCollision = (headBlock.col === n_WidthInBlocks - 1);
-      let b_BottomCollision = (headBlock.row === n_HeightInBlocks - 1);
-      let b_LeftCollision = (headBlock.col === 0);
+      let b_TopCollision = (headBlock.row === -1);
+      let b_RightCollision = (headBlock.col === n_WidthInBlocks);
+      let b_BottomCollision = (headBlock.row === n_HeightInBlocks);
+      let b_LeftCollision = (headBlock.col === -1);
       let b_WallCollision = b_TopCollision || b_RightCollision ||
         b_BottomCollision || b_LeftCollision;
       //check self collision
@@ -498,43 +689,181 @@
       this.position.drawApple();
     }
 
-    //Move apple in random position except walls
+    //Move apple in random position except snake
     Apple.prototype.move = function(){
-      let randomCol = Math.floor(Math.random() * (n_WidthInBlocks - 2) ) + 1;
-      let randomRow = Math.floor(Math.random() * (n_HeightInBlocks - 2) ) + 1;
-      this.position = new Block(randomCol, randomRow);
+      let randomCol;
+      let randomRow;
+      let bSnakePosition;
+
+      do {
+        bSnakePosition = false;
+        randomCol = Math.floor(Math.random() * (n_WidthInBlocks));
+        randomRow = Math.floor(Math.random() * (n_HeightInBlocks));
+        this.position = new Block(randomCol, randomRow);
+        for (var i = o_Snake.segments.length - 1; i >= 0; i--) { //check snake position
+          if (this.position.equal(o_Snake.segments[i]) ){
+            bSnakePosition = true; //new apple position is on snake
+          }
+        }
+      } while (bSnakePosition);
+      
     }
 
     /* PROTOTYPE METHODS */
 
+    /* EVENT HANDLERS */
+
+    //press on 'I' button (code 73) or button in header
+    //displays #controls-window or close it
+    let fShowHideControllsInfo = () => {
+      if (s_GameState === 'active'){
+        fGamePause();
+        $('#controls-window').css('display','flex');
+        return;
+      } else if (s_GameState === 'over'){
+        $('#constols_state').text('Game over');
+        $('#gameover-window').css('display','none');
+        $('#controls-window').css('display','flex');
+      } else if (s_GameState === 'paused'){
+        if ($('#pause-window').css('display') === 'flex'){ //paused with P
+          $('#pause-window').css('display','none')
+          $('#controls-window').css('display','flex');
+          return;
+        } else {
+          $('#controls-window').css('display','none');
+          fGameContinue();
+        }
+      }
+    }
+
+    //displays #gameover-window and stop game
+    let hGameoverWindowOpen = () => {
+      fGameStop();
+      $('#gameover-window').css('display','flex');
+    }
+
+
+    /* EVENT HANDLERS end */
+    let fHandleUsedKeys = (action) => {
+      switch (action){
+        case 'pause':
+          fPauseUnpause();
+          break;
+        case 'info':
+          fShowHideControllsInfo();
+          break;
+        case 'speed-':
+          fSpeedDecrease();
+          break;
+        case 'speed+':
+          fSpeedIncrease();
+          break;
+        case 'closeWindow':
+          fCloseAllWindows();
+          break;
+      }
+    }
+
+    //press on 'P' button (code 80) - pause and unpause game
+    let fPauseUnpause = () => {
+      if (s_GameState === 'over'){
+        return;
+      }
+      if ($('#controls-window').css('display') === 'flex'){
+        $('#controls-window').css('display','none');
+        fGameContinue();
+        return;
+      }
+      if (s_GameState === 'active'){
+        fGamePause();
+        $('#pause-window').css('display','flex');
+      } else{
+        fGameContinue();
+        $('#pause-window').css('display','none');
+      } 
+    }
+
+    //press on N (78) - decrease speed
+    let fSpeedDecrease = () => {
+      if (n_updateFrequancyMs < 95){
+        n_updateFrequancyMs += 5;
+        n_SpeedMode = 20 - n_updateFrequancyMs / 5;
+        if (n_SpeedMode === 1){
+          $('#s_speed').text(n_SpeedMode + ' (min)');
+        } else{
+          $('#s_speed').text(n_SpeedMode);
+        }
+      }
+    }
+
+    //press on M (77) - increase speed
+    let fSpeedIncrease = () => {
+      if (n_updateFrequancyMs > 50){
+        n_updateFrequancyMs -= 5;
+        n_SpeedMode = 20 - n_updateFrequancyMs / 5;
+        if (n_SpeedMode === 10){
+          $('#s_speed').text(n_SpeedMode + ' (max)');
+        } else{
+          $('#s_speed').text(n_SpeedMode);
+        }
+      }
+    }
+
     /* EVENTS */
 
-    $("body").keydown((event)=>{
-      let s_NewDirection = o_Directions[event.keyCode];
+    //buttons ok, resume and × in additional windows 
+    $('.window-button').click(fCloseAllWindows);
+
+    //click on ? in hedaer of desctop vesion. Same as press I
+    $('#help').click(fShowHideControllsInfo);
+
+    //Common event for keydown
+    $("body").keydown((e)=>{
+      // console.log(e.keyCode);
+      if (s_GameState === 'over'){
+        if (e.keyCode === 27 || e.keyCode === 13){
+          fCloseAllWindows();
+        } else if (e.keyCode === 73){
+          fShowHideControllsInfo();
+          return;
+        }
+      }
+
+      //direction
+      let s_NewDirection = o_Directions[e.keyCode];
       if (s_NewDirection !== undefined) {
         o_Snake.setDirection(s_NewDirection);
       }
-    })
+
+      let o_UsedKeys = {
+        80: 'pause', //P
+        73: 'info', //I
+        78: 'speed-', //N
+        77: 'speed+', //M
+        13: 'closeWindow', //Enter
+        27: 'closeWindow' //Esc
+      }
+
+      let s_Action = o_UsedKeys[e.keyCode];
+      fHandleUsedKeys(s_Action);
+
+    });
 
     /* EVENTS end */
 
+    // let  drawCheck = function(col, row) {
+    //   let x = col * n_BlockSize;
+    //   let y = row * n_BlockSize;
+    //   canvasContext.fillStyle = 'black';
+    //   canvasContext.fillRect(x, y, n_BlockSize, n_BlockSize);
+    // }
 
     /* MAIN CODE */
-
-    fSetInterface();
-
+    fInterfaceAndGlobalVariablesSetup();
     let o_Snake = new Snake();
     let o_Apple = new Apple();
-
-    n_IntervalId = setInterval(() => {
-      canvasContext.clearRect(0,0,n_CanvasWidth,n_CanvasHeight);
-      fDrawGrid();
-      fDrawBorder();
-      o_Apple.draw();
-      fDrawScore();
-      o_Snake.move();
-      o_Snake.draw();
-    }, 100);
+    fGameLoop();
+    // localStorage.clear();
 
     /* MAIN CODE end */
 
