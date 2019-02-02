@@ -68,6 +68,7 @@
       padding: 5px;
       flex: 0 1 auto;
       border: 1px solid grey;
+      border-radius: 20px 20px 0px 0px;
       position: relative; /*for img absolute position relatively .header*/
     }
 
@@ -117,20 +118,17 @@
       display: flex;
       flex: 1 1 auto;
       border: 1px solid grey;
+      box-sizing: border-box;
       /* width, height - set in js when the window is opened/reloaded */
     }
     
     #controls-speed-container{
       display: flex;
-      flex-flow: column;
+      flex-direction: column;
       flex: 1 1 auto;
-      justify-content: center;
-      border-right: 1px solid black;
-    }
-
-    #controls-speed{
-      display: flex;
       justify-content: space-around;
+      align-items: center;
+      border-right: 1px solid black;
     }
 
     #controls-direction-container{
@@ -139,10 +137,22 @@
       flex: 2 1 auto;
       justify-content: center;
     }
-    #controls-direction{
+/*    #controls-direction{
       display: flex;
       justify-content: space-around;
+    }*/
+    #controls-direction-up, #controls-direction-down{
+      display: flex;
+      flex: 1 1 content;
+      justify-content: center;
     }
+    #controls-direction-leftright{
+      display: flex;
+      flex: 3 1 content;
+      justify-content: space-around;
+    }
+
+
 
     .span-big{
       font-size: 1.5em;
@@ -154,6 +164,7 @@
       flex: 0 1 auto;
       padding: 5px 0;
       border: 1px solid grey;
+      border-radius: 0px 0px 20px 20px;
       box-sizing: border-box;
     }
     .footer a {
@@ -222,7 +233,6 @@
       color: white;
     }
     .close-btn{
-      
       border: 1px solid grey;
       padding: 5px;
       border-radius: 50%;
@@ -271,28 +281,22 @@
       <h1><b>Control buttons:</b></h1>
         <div class="div-text">
           <p>
-            <b><span id="↑">↑</span>,<span id="←">←</span>,<span id="↓">↓</span>,<span id="→">→</span></b> or 
-            <b><span id="w">W</span>,<span id="a">A</span>,<span id="s">S</span>,<span id="d">D</span></b>
-             - <i>direction</i>
+            <b>↑,←,↓,→</b> or <b>W,A,S,D</b> - <i>direction</i>
           </p>
-          <p> <b><span id="p">P</span></b> - <i>Pause/unpause</i></p>
-          <p> <b><span id="p">I</span></b> - <i>PC controls info show/hide</i></p>
-          <p> <b><span id="p">N</span></b> - <i>Speed decrease</i></p>
-          <p> <b><span id="p">M</span></b> - <i>Speed increase</i></p>
-          <p> <b><span id="p">Esc/Enter</span></b> - <i>Close window</i></p>
+          <p> <b>P</b> - <i>Pause/unpause</i></p>
+          <p> <b>I</b> - <i>PC controls info show/hide</i></p>
+          <p> <b>N</b> - <i>Speed decrease</i></p>
+          <p> <b>M</b> - <i>Speed increase</i></p>
+          <p> <b>Esc/Enter</b> - <i>Close window</i></p>
         </div>
       <div class="ok_btn window-button"><p>ok</p></div>
     </div>
 
     <div id="pause-window" class="info-window">
-      <div class="close-btn window-button "><p>×</p></div>
+      <div class="close-btn window-button"><p>×</p></div>
       <h1>Game paused</h1>
       <div class="ok_btn window-button"><p>Resume</p></div>
     </div>
-
-    
-
-
 <!-- info windows end -->
 
 <!-- #main-container -->
@@ -300,7 +304,7 @@
 
     <div class="header">
       <img id="help" src="media/question_mark.png" alt="controls info" height="30px">
-      <p>While without management from mobile</p>
+      <h1>Snake</h1>
     </div>
 
     <div id="game-container">
@@ -309,32 +313,51 @@
           <p>Record: <b><span id="s_record"></span></b></p>
           <p>Speed: <b><span id="s_speed"></span></b></p>
       </div>
+      
+      
 
       <div id="canvas-container">
+        <div id="controls-speed-container-landscape-placeholder"></div>
         <canvas id="canvas"></canvas> <!-- width and height are set in js -->
+        <div id="controls-direction-container-landscape-placeholder"></div>
       </div>
+
+      
+
     </div>
 
 
     <div id="mobile-control-container"> <!-- displays only for touchscreen devices --> 
 
-      <div id="controls-speed-container">
-        <p>Speed</p>
-        <div id="controls-speed"> 
+      <!-- <div id="copy-block1"> -->
+
+        <div id="controls-speed-container">
           <div class="mobile-control-button" id="button-speed_up"><span class="span-big">+</span></div>
           <div class="mobile-control-button" id="button-speed_down"><span class="span-big">-</span></div>
         </div>
-      </div>
+
+      <!-- </div> -->
+
+      <!-- <div id="copy-block2"> -->
       
-      <div id="controls-direction-container">
-        <p>Direction</p>
-        <div id="controls-direction">
-          <div class="mobile-control-button" id="button-up"> <span class="span-big">▲</span> </div>
-          <div class="mobile-control-button" id="button-down"> <span class="span-big">▼</span></div>
-          <div class="mobile-control-button" id="button-left"> <span class="span-big">◄</span></div>
-          <div class="mobile-control-button" id="button-right"> <span class="span-big">►</span></div>
+        <div id="controls-direction-container">
+  
+          <div id="controls-direction-up">
+            <div class="mobile-control-button" id="button-up"> <span class="span-big">▲</span> </div>
+          </div>
+  
+          <div id="controls-direction-leftright">
+            <div class="mobile-control-button" id="button-left"> <span class="span-big">◄</span></div>
+            <div class="mobile-control-button" id="button-right"> <span class="span-big">►</span></div>
+          </div>
+  
+          <div id="controls-direction-down">
+            <div class="mobile-control-button" id="button-down"> <span class="span-big">▼</span></div> 
+          </div> 
+        
         </div>
-      </div>
+
+      <!-- </div> -->
 
     </div>
 
@@ -362,8 +385,8 @@
     let n_HeightInBlocks; //n_WidthInBlocks-1, n_HeightInBlocks-1 - bottom-right cell
     //values assigned in fInterfaceAndGlobalVariablesSetup()
 
-    let n_updateFrequancyMs = 85;
-    let n_SpeedMode = 20 - n_updateFrequancyMs / 5;
+    let n_updateFrequancyMs;
+    let n_SpeedMode;
     let s_GameState = 'active'; // active, paused or over
 
     let n_Score = 0;
@@ -419,7 +442,10 @@
       });
   
       if (!fIsMobile()) { //desctop
-        $('#mobile-control-container').css('display','none'); 
+        $('#mobile-control-container').css('display','none');
+        //speed
+        n_updateFrequancyMs = 85;
+        n_SpeedMode = 20 - n_updateFrequancyMs / 5;
       } else { //mobile
         $('#help').css('display','none');
         //Increases text size on mobile devices
@@ -428,7 +454,7 @@
           : $('body').css('font-size','1.5em')    
         
         let nControlContainerHeight = (nWindowWidth < nWindowHeight)
-          ? nWindowShortSide * 0.12 : nWindowShortSide * 0.25;
+          ? nWindowShortSide * 0.5 : nWindowShortSide * 0.25;
         $('#mobile-control-container').css({
           'width' : nBodyMinWidth + 'px',
           'height' : nControlContainerHeight + 'px'
@@ -437,13 +463,42 @@
 
         //$('#mobile-control-container').сss('flex','0.5 1 auto')
   
-        let nButtonSize = nControlContainerHeight - 20;
+        let nButtonSize = (nControlContainerHeight - 20) / 3 ;
         $('.mobile-control-button').css({
           'width': nButtonSize +'px',
           'height': nButtonSize +'px',
           'margin': '10px'
         });
-      }
+
+        //speed
+        n_updateFrequancyMs = 135;
+        n_SpeedMode = 30 - n_updateFrequancyMs / 5;
+
+        $('.info-window').css('height',nWindowHeight / 6);
+        $('.info-window').css('width', nWindowWidth / 2);
+
+        $('.close-btn').css('height', '40px');
+        $('.close-btn').css('width', '40px');
+
+        //landscape orientation
+        if (nWindowWidth > nWindowHeight){
+          $('.header').css('display','none');
+          $('#info-bar').css('border-radius','20px 20px 0px 0px');
+          $('.info-window').css('height',nWindowHeight / 2.5);
+          $('.info-window').css('width', nWindowWidth / 2.5);
+          $('.close-btn').css('height', '30px');
+          $('.close-btn').css('width', '30px');
+
+          //move controlls
+          // $("#copy-block1").appendTo("#controls-speed-container-landscape-placeholder");
+          // $("#copy-block2").appendTo("#controls-direction-container-landscape-placeholder");
+
+          // $('#mobile-control-container').remove();
+
+        }
+
+      } //mobile end
+
 
       if (localStorage['lsSnakeRecord'] === undefined){
         localStorage['lsSnakeRecord'] = '0';
@@ -459,6 +514,11 @@
       //css canvas width and heights will be equal to html attr-s
       e_Canvas.width = n_CanvasWidth;
       e_Canvas.height = n_CanvasHeight;
+
+      //for mobile
+      n_CanvasHeight = Math.floor( $('#canvas-container').height() / n_BlockSize) * n_BlockSize;
+      e_Canvas.height = n_CanvasHeight;
+      //for mobile
 
       n_WidthInBlocks = Math.floor(n_CanvasWidth / n_BlockSize);
       n_HeightInBlocks = Math.floor(n_CanvasHeight / n_BlockSize); 
@@ -545,7 +605,8 @@
       }   
     }
 
-    let fDrawCircle = (Xcenter, Ycenter, radius, fill = true) => {
+    let fDrawCircle = (Xcenter, Ycenter, radius, fill = true, style = 'black') => {
+      canvasContext.fillStyle = style;
       canvasContext.beginPath();
       canvasContext.arc(Xcenter, Ycenter, radius, 0, Math.PI * 2);
       (fill) ? canvasContext.fill() : canvasContext.stroke();
@@ -588,6 +649,74 @@
       canvasContext.fillRect(x, y, n_BlockSize, n_BlockSize);
     }
 
+    Block.prototype.drawSnakeHead = function(color = 'black') {
+      canvasContext.fillStyle = color;
+      let TopLeftX = this.col * n_BlockSize;
+      let TopLeftY = this.row * n_BlockSize;
+      let radius = n_BlockSize / 2;
+      let Xcenter = this.col * n_BlockSize + radius;
+      let Ycenter = this.row * n_BlockSize + radius;
+
+      fDrawCircle(Xcenter, Ycenter, radius); //black circle
+
+      //suitable half square + suitable eyes
+      switch (o_Snake.direction) {
+        case 'up':
+          canvasContext.fillRect(TopLeftX, TopLeftY + radius, n_BlockSize, radius);
+          fDrawCircle(Xcenter + n_BlockSize / 6, Ycenter - n_BlockSize / 10, radius / 6, true, 'white');
+          fDrawCircle(Xcenter - n_BlockSize / 6, Ycenter - n_BlockSize / 10, radius / 6, true, 'white');
+          break;
+        case 'right':
+          canvasContext.fillRect(TopLeftX, TopLeftY, radius, n_BlockSize);
+          fDrawCircle(Xcenter + n_BlockSize / 10, Ycenter - n_BlockSize / 6, radius / 6, true, 'white');
+          fDrawCircle(Xcenter + n_BlockSize / 10, Ycenter + n_BlockSize / 6, radius / 6, true, 'white');
+          break;
+        case 'down':
+          canvasContext.fillRect(TopLeftX, TopLeftY, n_BlockSize, radius);
+          fDrawCircle(Xcenter + n_BlockSize / 6, Ycenter + n_BlockSize / 10, radius / 6, true, 'white');
+          fDrawCircle(Xcenter - n_BlockSize / 6, Ycenter + n_BlockSize / 10, radius / 6, true, 'white');
+          break;
+        case 'left':
+          canvasContext.fillRect(TopLeftX + radius, TopLeftY, radius, n_BlockSize);
+          fDrawCircle(Xcenter - n_BlockSize / 10, Ycenter - n_BlockSize / 6, radius / 6, true, 'white');
+          fDrawCircle(Xcenter - n_BlockSize / 10, Ycenter + n_BlockSize / 6, radius / 6, true, 'white');
+          break;
+      }
+
+      
+    }
+
+    // Block.prototype.drawSnakeTeal = function(color = 'black') {
+    //   canvasContext.fillStyle = color;
+
+    //   let TopLeftX = this.col * n_BlockSize;
+    //   let TopLeftY = this.row * n_BlockSize;
+    //   let radius = n_BlockSize / 2;
+    //   let Xcenter = this.col * n_BlockSize + radius;
+    //   let Ycenter = this.row * n_BlockSize + radius;
+
+    //   //suitable triangle
+    //   switch (o_Snake.direction) {
+    //     case 'up':
+    //       canvasContext.fillRect(TopLeftX, TopLeftY + radius, n_BlockSize, radius);
+    //       break;
+    //     case 'right':
+    //       canvasContext.fillRect(TopLeftX, TopLeftY, radius, n_BlockSize);
+    //       break;
+    //     case 'down':
+    //       canvasContext.fillRect(TopLeftX, TopLeftY, n_BlockSize, radius);
+    //       break;
+    //     case 'left':
+    //       canvasContext.beginPath();
+    //       canvasContext.moveTo(TopLeftX, TopLeftY);
+    //       canvasContext.lineTo(TopLeftX, TopLeftY  + n_BlockSize);
+    //       canvasContext.lineTo(TopLeftX + n_BlockSize, TopLeftY  + radius);
+    //       canvasContext.lineTo(TopLeftX, TopLeftY);
+    //       canvasContext.fill();
+    //       break;
+    //   }
+    // }
+
     Block.prototype.drawApple = function() {
       let radius = n_BlockSize / 2;
       let Xcenter = (this.col * n_BlockSize) + radius;
@@ -597,7 +726,7 @@
       canvasContext.strokeStyle = 'black';
       canvasContext.lineWidth = 2;
       
-      fDrawCircle(Xcenter, Ycenter, radius);
+      fDrawCircle(Xcenter, Ycenter, radius, true, 'tomato');
       fDrawCircle(Xcenter, Ycenter, radius-1, false);
     }
 
@@ -608,9 +737,16 @@
 
     //draw square for each part of snake
     Snake.prototype.draw = function(direction) {
-      for (let i = 0; i < this.segments.length; i++){
+      //head
+      this.segments[0].drawSnakeHead();
+
+      //body
+      for (let i = 1; i < this.segments.length; i++){
         this.segments[i].drawSnakePart();
       }
+
+      //teal
+      // this.segments[this.segments.length - 1].drawSnakeTeal();
     }
 
     //Create new head and add it to start of snake, to move it on the direction
@@ -785,28 +921,45 @@
 
     //press on N (78) - decrease speed
     let fSpeedDecrease = () => {
-      if (n_updateFrequancyMs < 95){
-        n_updateFrequancyMs += 5;
-        n_SpeedMode = 20 - n_updateFrequancyMs / 5;
-        if (n_SpeedMode === 1){
-          $('#s_speed').text(n_SpeedMode + ' (min)');
-        } else{
-          $('#s_speed').text(n_SpeedMode);
+      if (fIsMobile()){ //moile speed
+        if (n_updateFrequancyMs < 145){
+          n_updateFrequancyMs += 5;
+          n_SpeedMode = 30 - n_updateFrequancyMs / 5;
         }
+      } else { //desctop speed
+        if (n_updateFrequancyMs < 95){
+          n_updateFrequancyMs += 5;
+          n_SpeedMode = 20 - n_updateFrequancyMs / 5;
+        }
+      }
+
+      if (n_SpeedMode === 1){
+        $('#s_speed').text(n_SpeedMode + ' (min)');
+      } else{
+        $('#s_speed').text(n_SpeedMode);
       }
     }
 
     //press on M (77) - increase speed
     let fSpeedIncrease = () => {
-      if (n_updateFrequancyMs > 50){
-        n_updateFrequancyMs -= 5;
-        n_SpeedMode = 20 - n_updateFrequancyMs / 5;
-        if (n_SpeedMode === 10){
-          $('#s_speed').text(n_SpeedMode + ' (max)');
-        } else{
-          $('#s_speed').text(n_SpeedMode);
+      if (fIsMobile()){ //moile speed
+        if (n_updateFrequancyMs > 100){
+          n_updateFrequancyMs -= 5;
+          n_SpeedMode = 30 - n_updateFrequancyMs / 5;
+        }
+      } else { //desctop speed
+        if (n_updateFrequancyMs > 50){
+          n_updateFrequancyMs -= 5;
+          n_SpeedMode = 20 - n_updateFrequancyMs / 5;
         }
       }
+
+      if (n_SpeedMode === 10){
+        $('#s_speed').text(n_SpeedMode + ' (max)');
+      } else{
+        $('#s_speed').text(n_SpeedMode);
+      }
+
     }
 
     /* EVENTS */
@@ -835,6 +988,7 @@
         o_Snake.setDirection(s_NewDirection);
       }
 
+      //other keys
       let o_UsedKeys = {
         80: 'pause', //P
         73: 'info', //I
@@ -847,6 +1001,39 @@
       let s_Action = o_UsedKeys[e.keyCode];
       fHandleUsedKeys(s_Action);
 
+    });
+
+    //Mobile events
+    //handles taps at mobile control buttons (and their childs) 
+    $('.mobile-control-button').on('touchstart',(event)=>{
+      //forbid to fire handler if any contol button still in use
+      if (event.touches.length > 1) {
+        return;
+      }
+      
+      let a_ButtonsIds = ['button-speed_up', 'button-speed_down',
+        'button-up', 'button-left', 'button-down', 'button-right'];
+      let a_ButtonsActions = ['speed+', 'speed-', 'up', 'left',
+        'down', 'right'];
+
+      for (var i = a_ButtonsIds.length - 1; i >= 0; i--) {
+
+        if (event.currentTarget.id ===  a_ButtonsIds[i]){
+          //speed
+          if (i < 2){
+            fHandleUsedKeys(a_ButtonsActions[i]);
+          } else { //direction
+            o_Snake.setDirection(a_ButtonsActions[i]);
+          }
+          break;
+          // b_DirectionKeyHold = (a_ButtonsActions[i] === 'up'
+          // || a_ButtonsActions[i] === 'right' || a_ButtonsActions[i] === 'down'
+          // || a_ButtonsActions[i] === 'left');
+          // setAction(a_ButtonsActions[i]);
+          // n_pressIntervalId = setInterval(()=>{ball.setAction(a_ButtonsActions[i]);},25);
+          
+        }
+      }
     });
 
     /* EVENTS end */
