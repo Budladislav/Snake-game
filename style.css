@@ -1,0 +1,237 @@
+/*disable text selection*/
+* { 
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none; /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+}
+html,body{
+  margin: 0;
+  height: 100%;
+}
+/* js: minimal min-width 500/min-height 500.
+  If client size bigger - size of body almost all of client */
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Verdana;
+  font-size: 1em;
+  /*default, if js don't work*/
+  min-width: 500px; 
+  min-height: 500px;
+  /* min-width, min-height - set when the window is opened/reloaded */
+}
+/* js: minmal width 500/height 500. If body bigger - size almost all of body*/
+#main-container {
+  display: flex;
+  flex-flow: column;
+  /*default, if js don't work*/
+  width: 500px;
+  height: 500px;
+  /* width, height - set when the window is opened/reloaded */
+}
+h1, p {
+  margin: 0;
+}
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px;
+  flex: 0 1 auto;
+  border: 1px solid grey;
+  border-radius: 20px 20px 0px 0px;
+  position: relative; /*for img absolute position relatively .header*/
+}
+#pc-controls-help {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 10px;
+  cursor: pointer;
+}
+
+/*flex - occupies x3 free space except .header and .footer */
+#game-container{
+  flex: 3 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+/* flex: height - depends on content of #info-container */
+#info-bar{
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid grey;
+  padding: 5px 0;
+}
+#info-bar p {
+  display: inline-block;
+}
+#canvas-container{
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  border: 1px solid grey;
+}
+#landscape-placeholder-speed{
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: space-around;
+  align-items: center;
+  /*border-right: 1px solid black;*/
+}
+
+canvas{
+  border: 2px solid blue;
+}
+#landscape-placeholder-direction{
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+/*flex - occupies x1 free space except .header and .footer */
+#mobile-control-container{
+  display: none;
+  flex: 1 1 auto;
+  border: 1px solid grey;
+  box-sizing: border-box;
+  /* width, height - set in js when the window is opened/reloaded */
+}
+
+#controls-speed-container{
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  justify-content: space-around;
+  align-items: center;
+  border-right: 1px solid black;
+}
+#controls-direction-container{
+  display: flex;
+  flex-flow: column;
+  flex: 2 1 auto;
+  justify-content: center;
+}
+#controls-direction-up, #controls-direction-down{
+  display: flex;
+  flex: 1 1 content;
+  justify-content: center;
+}
+#controls-direction-leftright{
+  display: flex;
+  flex: 3 1 content;
+  justify-content: space-around;
+}
+.span-big{
+  font-size: 1.5em;
+}
+.footer { /* flex: height - depends on content of .footer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 auto;
+  padding: 5px 0;
+  border: 1px solid grey;
+  border-radius: 0px 0px 20px 20px;
+  box-sizing: border-box;
+}
+.footer a {
+  color: black;
+  text-decoration: none;
+  border-bottom: 1px solid black;
+}
+
+.footer a:hover {
+  border: 1px solid black;
+  padding: 1px;
+}
+
+.footer a:active {
+  background: orange;
+  border-radius: 10px;
+  padding: 2px;
+  border: 1px solid black;
+}
+.mobile-control-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightblue;
+  border-radius: 50%;
+  box-shadow:
+    inset rgba(0,0,0,.5) -3px -3px 8px,
+    inset rgba(255,255,255,.9) 3px 3px 8px,
+    rgba(0,0,0,.8) 3px 3px 8px -3px;
+  /*default, if js don't work*/
+  width: 50px;
+  height: 50px;
+  /*width,height,margin - js */
+}
+.info-window{
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.9);
+  width: 300px;
+  height: 125px;
+  padding: 20px 10px 10px 10px;
+}
+#controls-window{
+  height: 300px;
+  display: none;
+}
+#gameover-window{
+  display: none;
+}
+#pause-window{
+  display: none;
+}
+.window-button{
+  box-shadow:
+    inset rgba(0,0,0,.5) -3px -3px 8px,
+    inset rgba(255,255,255,.9) 3px 3px 8px,
+    rgba(0,0,0,.8) 3px 3px 8px -3px;
+  color: white;
+  cursor: pointer;
+}
+.close-btn{
+  border: 1px solid grey;
+  padding: 5px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: gray;
+  
+}
+.ok_btn{
+  width: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  background-color: gray;
+  font-weight: bold;
+  text-align: center;
+}
+
+.div-text p {
+  margin-bottom: 5px;
+}
